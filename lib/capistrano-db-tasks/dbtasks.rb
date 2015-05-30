@@ -22,7 +22,8 @@ if Capistrano::Configuration.instance(false)
     namespace :db do
       namespace :remote do
         desc 'Synchronize your remote database using local database data'
-        task :sync => 'capistrano_db_tasks:check_can_push', :roles => :db do
+        task :sync, :roles => :db do
+          capistrano_db_tasks.check_can_push
           if Util.prompt 'Are you sure you want to REPLACE THE REMOTE DATABASE with local database'
             Database.local_to_remote(instance)
           end
@@ -45,7 +46,8 @@ if Capistrano::Configuration.instance(false)
       end
 
       desc 'Synchronize your remote database using local database data'
-      task :push => 'capistrano_db_tasks:check_can_push' do
+      task :push do
+        capistrano_db_tasks.check_can_push
         db.remote.sync
       end
     end
@@ -53,7 +55,8 @@ if Capistrano::Configuration.instance(false)
     namespace :assets do
       namespace :remote do
         desc 'Synchronize your remote assets using local assets'
-        task :sync => 'capistrano_db_tasks:check_can_push', :roles => :app do
+        task :sync, :roles => :app do
+          capistrano_db_tasks.check_can_push
           puts "Assets directories: #{assets_dir}"
           if Util.prompt "Are you sure you want to erase your server assets with local assets"
             Asset.local_to_remote(instance)
@@ -77,7 +80,8 @@ if Capistrano::Configuration.instance(false)
       end
 
       desc 'Synchronize your remote assets using local assets'
-      task :push => 'capistrano_db_tasks:check_can_push' do
+      task :push do
+        capistrano_db_tasks.check_can_push
         assets.remote.sync
       end
     end
@@ -85,7 +89,8 @@ if Capistrano::Configuration.instance(false)
     namespace :app do
       namespace :remote do
         desc 'Synchronize your remote assets AND database using local assets and database'
-        task :sync => 'capistrano_db_tasks:check_can_push' do
+        task :sync do
+          capistrano_db_tasks.check_can_push
           if Util.prompt "Are you sure you want to REPLACE THE REMOTE DATABASE AND your remote assets with local database and assets(#{assets_dir})"
             Database.local_to_remote(instance)
             Asset.local_to_remote(instance)
@@ -111,7 +116,8 @@ if Capistrano::Configuration.instance(false)
       end
 
       desc 'Synchronize your remote assets AND database using local assets and database'
-      task :push => 'capistrano_db_tasks:check_can_push' do
+      task :push do
+        capistrano_db_tasks.check_can_push
         app.remote.sync
       end
 
