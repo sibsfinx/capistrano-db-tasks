@@ -9,13 +9,13 @@ if Capistrano::Configuration.instance(false)
     instance.set :local_rails_env, ENV['RAILS_ENV'] || 'development' unless exists?(:local_rails_env)
     instance.set :rails_env, 'production' unless exists?(:rails_env)
     instance.set :db_local_clean, false unless exists?(:db_local_clean)
+    instance.set :disallow_pushing, false unless exists?(:disallow_pushing)
     instance.set :assets_dir, 'system' unless exists?(:assets_dir)
     instance.set :local_assets_dir, 'public' unless exists?(:local_assets_dir)
-    instance.set :disallow_pushing, false unless exists?(:disallow_pushing)
 
     namespace :capistrano_db_tasks do
       task :check_can_push do
-        raise "pushing is disabled, set disallow_pushing to false to carry out this operation" if fetch(:disallow_pushing)
+        raise "pushing is disabled, set disallow_pushing to false to carry out this operation" if instance.fetch(:disallow_pushing)
       end
     end
 
